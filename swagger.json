@@ -1,0 +1,230 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "3.0.0",
+    "title": "API CRUD D'OBJETS",
+    "description": "Une API qui permet d'ajouter toutes choses et d'autres"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "La formation",
+      "description": "Une API pour apprendre nodeJS"
+    }
+  ],
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Entrez le token avec le préfixe 'Bearer:' e.g. : Bearer abcde12345...."
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths" : {
+
+    "/api/stuff": {
+
+      "get": {
+        "tags": ["Thing"],
+        "summary": "Liste tous les objets",
+        "responses": {
+          "200": {
+            "description": "Retourne une liste de Thing",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          },
+          "400": {
+            "description": "Erreur retournée par l'API"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Thing"],
+        "summary": "Crée un objet",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "thing",
+            "in": "body",
+            "description": "Nouvel objet à créer. A mettre dans une clé \"thing\"",
+            "schema": {
+              "$ref": "#/definitions/ThingWithoutUserId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objet enregistré !"
+          },
+          "400": {
+            "description": "Erreur renvoyée par l'API."
+          },
+          "401": {
+            "description": "Utilisateur non autorisé."
+          }
+        },
+        "produces": ["application/json"]
+      }
+
+    },
+    "/api/stuff/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID de l'objet",
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": [
+          "Thing"
+        ],
+        "summary": "Modifie un objet",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "thing",
+            "in": "body",
+            "description": "Objet à modifier. A mettre dans une clé \"thing\"",
+            "schema": {
+              "$ref": "#/definitions/ThingWithoutUserId"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objet modifié !",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          },
+          "400": {
+            "description": "Objet non trouvé !"
+          },
+          "401": {
+            "description": "Ce n'est pas l'objet de l'utilisateur / Utilisateur non authentifié"
+          }
+        },
+        "produces": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "tags": ["Thing"],
+        "summary": "Supprime un objet",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objet supprimé !",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          },
+          "400": {
+            "description": "Objet non trouvé !"
+          },
+          "401": {
+            "description": "L'utilisateur n'est pas authentifié !"
+          }
+        },
+        "produces": ["application/json"]
+      },
+      "post": {
+        "tags": ["Thing"],
+        "summary": "N'existe pas, c'est juste pour voir comment spécifier des paramètres sans définition",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Email de la personne",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "description": "Paswword de la personne",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Objet supprimé !",
+            "schema": {
+              "$ref": "#/definitions/Thing"
+            }
+          },
+          "400": {
+            "description": "Objet non trouvé !"
+          },
+          "401": {
+            "description": "L'utilisateur n'est pas authentifié !"
+          }
+        },
+        "produces": ["application/json"]
+      }
+    }
+  },
+  "definitions": {
+    "Thing": {
+      "required": ["title","description","imageUrl","userId","price"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    },
+    "ThingWithoutUserId": {
+      "required": ["title","description","imageUrl","price"],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
